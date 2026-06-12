@@ -1,4 +1,4 @@
-var CACHE = 'golfpool-v2';
+var CACHE = 'golfpool-v3';
 var SHELL = [
   './',
   './index.html',
