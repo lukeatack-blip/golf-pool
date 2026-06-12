@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Golf Pool</title>
-<meta name="theme-color" content="#0a1628">
+<meta name="theme-color" content="#083860">
 <link rel="manifest" href="./manifest.json">
 <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
 <link rel="apple-touch-icon" href="./apple-touch-icon.png">
@@ -16,15 +16,15 @@
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     background: #eef1f5;
-    color: #0a1628;
+    color: #083860;
     padding: 16px;
     padding-top: calc(16px + env(safe-area-inset-top));
     max-width: 600px;
     margin: 0 auto;
   }
   .header { text-align: center; margin-bottom: 16px; }
-  .header h1 { font-size: 22px; color: #0a1628; letter-spacing: 1px; }
-  .header .sub { font-size: 12px; color: #5a6b85; margin-top: 4px; }
+  .logo { display: block; width: min(300px, 78%); height: auto; margin: 0 auto; }
+  .status { font-size: 12px; color: #d01828; margin-top: 8px; }
   .team {
     background: #ffffff;
     border-radius: 10px;
@@ -35,15 +35,14 @@
     align-items: stretch;
   }
   .team-left {
-    background: #0a1628;
+    background: #083860;
     color: #fff;
-    padding: 12px 10px;
+    padding: 12px 12px;
     display: flex;
     align-items: center;
     flex: 0 0 38%;
   }
-  .rank { font-size: 18px; font-weight: 700; color: #d4af37; width: 24px; flex-shrink: 0; }
-  .team-name { font-size: 15px; font-weight: 600; flex: 1; line-height: 1.2; }
+  .team-name { font-size: 18px; font-weight: 600; flex: 1; line-height: 1.2; }
   .team-total { font-size: 20px; font-weight: 700; margin-left: 6px; }
   .golfers {
     flex: 1;
@@ -56,7 +55,7 @@
   .golfer-name { flex: 1; color: #2c3e50; }
   .golfer-thru { width: 44px; text-align: center; color: #8a9bb0; font-size: 12px; }
   .golfer-score { width: 40px; text-align: right; font-weight: 600; }
-  .neg { color: #c0392b; }
+  .neg { color: #d01828; }
   .pos { color: #5a6b85; }
   .even { color: #5a6b85; }
   .team-left .neg, .team-left .pos, .team-left .even { color: #fff; }
@@ -64,7 +63,7 @@
     display: block;
     width: 100%;
     padding: 12px;
-    background: #0a1628;
+    background: #083860;
     color: #fff;
     border: none;
     border-radius: 10px;
@@ -79,8 +78,8 @@
 </head>
 <body>
   <div class="header">
-    <h1>⛳ GOLF POOL</h1>
-    <div class="sub" id="updated">Loading...</div>
+    <img class="logo" src="./us-open-logo.png" alt="US Open">
+    <div class="status" id="status" hidden></div>
   </div>
 
   <div id="standings">
@@ -106,13 +105,9 @@
   function fmtScore(s) {
     var n = Number(s);
     if (isNaN(n) || s === '' || s === null) return { text: esc(s), cls: 'even' };
-    if (n > 0) return { text: String(n), cls: 'pos' };
+    if (n > 0) return { text: '+' + n, cls: 'pos' };
     if (n < 0) return { text: String(n), cls: 'neg' };
     return { text: 'E', cls: 'even' };
-  }
-
-  function nowTime() {
-    return new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
   }
 
   function render(data) {
@@ -123,11 +118,10 @@
     }
 
     var html = '';
-    data.teams.forEach(function(team, idx) {
+    data.teams.forEach(function(team) {
       var totalFmt = fmtScore(team.total);
       html += '<div class="team">';
       html += '  <div class="team-left">';
-      html += '    <div class="rank">' + (idx + 1) + '</div>';
       html += '    <div class="team-name">' + esc(team.name) + '</div>';
       html += '    <div class="team-total ' + totalFmt.cls + '">' + totalFmt.text + '</div>';
       html += '  </div>';
@@ -147,14 +141,13 @@
 
     document.getElementById('standings').innerHTML = html;
     hasData = true;
-    document.getElementById('updated').textContent = 'Updated ' + nowTime();
+    document.getElementById('status').hidden = true;
   }
 
   function loadData() {
     if (EXEC_URL.indexOf('PASTE_YOUR') !== -1) {
       document.getElementById('standings').innerHTML =
         '<div class="loading">Setup needed: open index.html and paste your Apps Script /exec URL into the EXEC_URL line near the top of the script.</div>';
-      document.getElementById('updated').textContent = 'Not connected';
       return;
     }
     fetch(EXEC_URL + '?api=1')
@@ -164,12 +157,13 @@
       })
       .then(render)
       .catch(function() {
+        var st = document.getElementById('status');
         if (hasData) {
-          document.getElementById('updated').textContent = 'Offline. Showing last loaded scores.';
+          st.textContent = 'Offline. Showing last loaded scores.';
+          st.hidden = false;
         } else {
           document.getElementById('standings').innerHTML =
             '<div class="loading">Can\'t load scores right now. Check your connection, then tap Refresh Now.</div>';
-          document.getElementById('updated').textContent = 'Not connected';
         }
       });
   }

@@ -1,10 +1,11 @@
-var CACHE = 'golfpool-v1';
+var CACHE = 'golfpool-v2';
 var SHELL = [
   './',
   './index.html',
   './manifest.json',
   './icon-192.png',
   './icon-512.png',
+  './us-open-logo.png',
   './apple-touch-icon.png'
 ];
 
