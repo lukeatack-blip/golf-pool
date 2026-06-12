@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Golf Pool</title>
+<meta name="theme-color" content="#0a1628">
+<link rel="manifest" href="./manifest.json">
+<link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Golf Pool">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #eef1f5;
+    color: #0a1628;
+    padding: 16px;
+    padding-top: calc(16px + env(safe-area-inset-top));
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  .header { text-align: center; margin-bottom: 16px; }
+  .header h1 { font-size: 22px; color: #0a1628; letter-spacing: 1px; }
+  .header .sub { font-size: 12px; color: #5a6b85; margin-top: 4px; }
+  .team {
+    background: #ffffff;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    overflow: hidden;
+    border: 1px solid #d8dee8;
+    display: flex;
+    align-items: stretch;
+  }
+  .team-left {
+    background: #0a1628;
+    color: #fff;
+    padding: 12px 10px;
+    display: flex;
+    align-items: center;
+    flex: 0 0 38%;
+  }
+  .rank { font-size: 18px; font-weight: 700; color: #d4af37; width: 24px; flex-shrink: 0; }
+  .team-name { font-size: 15px; font-weight: 600; flex: 1; line-height: 1.2; }
+  .team-total { font-size: 20px; font-weight: 700; margin-left: 6px; }
+  .golfers {
+    flex: 1;
+    padding: 6px 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .golfer { display: flex; align-items: center; padding: 4px 0; font-size: 14px; }
+  .golfer-name { flex: 1; color: #2c3e50; }
+  .golfer-thru { width: 44px; text-align: center; color: #8a9bb0; font-size: 12px; }
+  .golfer-score { width: 40px; text-align: right; font-weight: 600; }
+  .neg { color: #c0392b; }
+  .pos { color: #5a6b85; }
+  .even { color: #5a6b85; }
+  .team-left .neg, .team-left .pos, .team-left .even { color: #fff; }
+  .refresh-btn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background: #0a1628;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    margin-top: 8px;
+    cursor: pointer;
+  }
+  .refresh-btn:active { opacity: 0.7; }
+  .loading { text-align: center; color: #8a9bb0; padding: 20px; line-height: 1.5; }
+</style>
+</head>
+<body>
+  <div class="header">
+    <h1>⛳ GOLF POOL</h1>
+    <div class="sub" id="updated">Loading...</div>
+  </div>
+
+  <div id="standings">
+    <div class="loading">Loading standings...</div>
+  </div>
+
+  <button class="refresh-btn" onclick="loadData()">Refresh Now</button>
+
+<script>
+  // ============================================================
+  // SETUP: paste your Apps Script web app URL between the quotes
+  // on the next line. It must end in /exec
+  // ============================================================
+  var EXEC_URL = 'https://script.google.com/macros/s/AKfycbxngbFqVZH8OYTTcKmFBCV3wg8STg9KCj83camiH9R0kERdwFm_o5FtAzJoq6rcCDNp/exec';
+
+  var hasData = false;
+
+  function esc(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  function fmtScore(s) {
+    var n = Number(s);
+    if (isNaN(n) || s === '' || s === null) return { text: esc(s), cls: 'even' };
+    if (n > 0) return { text: String(n), cls: 'pos' };
+    if (n < 0) return { text: String(n), cls: 'neg' };
+    return { text: 'E', cls: 'even' };
+  }
+
+  function nowTime() {
+    return new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+  }
+
+  function render(data) {
+    if (data.error) {
+      document.getElementById('standings').innerHTML =
+        '<div class="loading">Error: ' + esc(data.error) + '</div>';
+      return;
+    }
+
+    var html = '';
+    data.teams.forEach(function(team, idx) {
+      var totalFmt = fmtScore(team.total);
+      html += '<div class="team">';
+      html += '  <div class="team-left">';
+      html += '    <div class="rank">' + (idx + 1) + '</div>';
+      html += '    <div class="team-name">' + esc(team.name) + '</div>';
+      html += '    <div class="team-total ' + totalFmt.cls + '">' + totalFmt.text + '</div>';
+      html += '  </div>';
+      html += '  <div class="golfers">';
+      team.golfers.forEach(function(g) {
+        var gs = fmtScore(g.score);
+        var thru = g.thru ? esc(g.thru) : '';
+        html += '<div class="golfer">';
+        html += '  <div class="golfer-name">' + esc(g.name) + '</div>';
+        html += '  <div class="golfer-thru">' + thru + '</div>';
+        html += '  <div class="golfer-score ' + gs.cls + '">' + gs.text + '</div>';
+        html += '</div>';
+      });
+      html += '  </div>';
+      html += '</div>';
+    });
+
+    document.getElementById('standings').innerHTML = html;
+    hasData = true;
+    document.getElementById('updated').textContent = 'Updated ' + nowTime();
+  }
+
+  function loadData() {
+    if (EXEC_URL.indexOf('PASTE_YOUR') !== -1) {
+      document.getElementById('standings').innerHTML =
+        '<div class="loading">Setup needed: open index.html and paste your Apps Script /exec URL into the EXEC_URL line near the top of the script.</div>';
+      document.getElementById('updated').textContent = 'Not connected';
+      return;
+    }
+    fetch(EXEC_URL + '?api=1')
+      .then(function(r) {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.json();
+      })
+      .then(render)
+      .catch(function() {
+        if (hasData) {
+          document.getElementById('updated').textContent = 'Offline. Showing last loaded scores.';
+        } else {
+          document.getElementById('standings').innerHTML =
+            '<div class="loading">Can\'t load scores right now. Check your connection, then tap Refresh Now.</div>';
+          document.getElementById('updated').textContent = 'Not connected';
+        }
+      });
+  }
+
+  loadData();
+  setInterval(loadData, 60000);
+  document.addEventListener('visibilitychange', function() {
+    if (!document.hidden) loadData();
+  });
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js');
+  }
+</script>
+</body>
+</html>
