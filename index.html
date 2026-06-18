@@ -46,14 +46,22 @@
     flex-shrink: 0;
   }
 
-  /* Grid structure ensures the text always occupies the same starting alignment */
+  /* Left-aligned wrapper with a tight gap for the elements */
   .name-wrap { 
     flex: 1; 
-    display: grid; 
-    grid-template-columns: 20px 1fr 20px; 
+    display: flex; 
     align-items: center; 
     gap: 4px;
     min-width: 0; 
+    justify-content: flex-start;
+  }
+  
+  /* Fixed spacing container for the left slot so names line up perfectly */
+  .emoji-spacer {
+    width: 22px;
+    display: inline-flex;
+    justify-content: center;
+    flex-shrink: 0;
   }
   
   /* Left aligned name, ensuring it stays consistent across rows */
@@ -63,14 +71,11 @@
     line-height: 1.2; 
     text-align: left; 
     white-space: nowrap;
-    grid-column: 2; 
   }
   
   .team-total { font-size: 20px; font-weight: 700; margin-left: auto; padding-left: 4px; flex-shrink: 0; }
   
-  .pile { font-size: 15px; flex-shrink: 0; line-height: 1; text-align: center; }
-  .pile-left { grid-column: 1; }
-  .pile-right { grid-column: 3; }
+  .pile { font-size: 15px; flex-shrink: 0; line-height: 1; }
 
   .golfers {
     flex: 1;
@@ -169,9 +174,14 @@
       var teamScore = Number(team.total);
       
       if (showPoopEmoji && teamScore === targetWorstScore) {
-        nameInner = '<span class="pile pile-left">&#128169;</span><div class="team-name">' + esc(team.name) + '</div><span class="pile pile-right">&#128169;</span>';
+        // Left side gets its emoji inside the fixed-width spacer; right side tags along naturally right after the name text.
+        nameInner = '<div class="emoji-spacer"><span class="pile">&#128169;</span></div>' +
+                    '<div class="team-name">' + esc(team.name) + '</div>' +
+                    '<span class="pile">&#128169;</span>';
       } else {
-        nameInner = '<div class="team-name">' + esc(team.name) + '</div>';
+        // Rows without emojis still get the empty fixed-width structural spacer so the names start on the exact same pixel line.
+        nameInner = '<div class="emoji-spacer"></div>' +
+                    '<div class="team-name">' + esc(team.name) + '</div>';
       }
       
       html += '<div class="team">';
