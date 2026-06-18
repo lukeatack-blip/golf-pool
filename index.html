@@ -22,9 +22,12 @@
     max-width: 600px;
     margin: 0 auto;
   }
-  .header { text-align: center; margin-bottom: 16px; }
-  .logo { display: block; width: min(300px, 78%); height: auto; margin: 0 auto; }
-  .status { font-size: 12px; color: #d01828; margin-top: 8px; }
+  .header { text-align: center; margin-bottom: 12px; }
+  
+  /* Made the US Open logo smaller and more compact */
+  .logo { display: block; width: 140px; height: auto; margin: 0 auto; }
+  .status { font-size: 12px; color: #d01828; margin-top: 6px; }
+  
   .team {
     background: #ffffff;
     border-radius: 10px;
@@ -35,7 +38,6 @@
     align-items: stretch;
   }
   
-  /* Widened to 142px to look less crowded while protecting the right side layout */
   .team-left {
     background: #083860;
     color: #fff;
@@ -55,7 +57,6 @@
     justify-content: flex-start;
   }
   
-  /* Spacer to ensure names line up exactly right */
   .emoji-spacer {
     width: 20px;
     display: inline-flex;
@@ -75,7 +76,6 @@
   
   .pile { font-size: 14px; flex-shrink: 0; line-height: 1; }
 
-  /* Flex layout handles the remaining card space smoothly */
   .golfers {
     flex: 1;
     padding: 6px 10px;
@@ -86,7 +86,6 @@
   }
   .golfer { display: flex; align-items: center; padding: 4px 0; font-size: 14px; min-width: 0; }
   
-  /* Added text-overflow rules to guarantee long names never push to a second line */
   .golfer-name { 
     flex: 1; 
     color: #2c3e50; 
