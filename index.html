@@ -101,6 +101,7 @@
       .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   }
 
+  // Formatting utility for player scores
   function fmtScore(s) {
     var n = Number(s);
     if (isNaN(n) || s === '' || s === null) return { text: esc(s), cls: 'even' };
@@ -116,20 +117,38 @@
       return;
     }
 
-    // Determine the scores for the bottom 3 distinct leaderboard slots
-    var uniqueScores = [];
-    data.teams.forEach(function(team) {
-      var scoreNum = Number(team.total);
-      if (uniqueScores.indexOf(scoreNum) === -1) {
-        uniqueScores.push(scoreNum);
+    var totalTeams = data.teams.length;
+    var bottomScoresToFlag = [];
+    
+    if (totalTeams > 0) {
+      // Find the absolute worst score value at the bottom row
+      var absoluteWorstScore = Number(data.teams[totalTeams - 1].total);
+      
+      // Track unique scores to check tiers
+      var uniqueScores = [];
+      data.teams.forEach(function(t) {
+        var s = Number(t.total);
+        if (uniqueScores.indexOf(s) === -1) uniqueScores.push(s);
+      });
+      uniqueScores.sort(function(a, b) { return a - b; });
+
+      // Gather the 3 worst unique scores
+      var worstThreeTiers = uniqueScores.slice(-3);
+
+      // Now determine how many total players qualify across those bottom 3 tiers
+      var totalPeopleInBottomTiers = 0;
+      data.teams.forEach(function(team) {
+        if (worstThreeTiers.indexOf(Number(team.total)) !== -1) {
+          totalPeopleInBottomTiers++;
+        }
+      });
+
+      // Strict enforcement: if the total headcount in those bottom tiers exceeds 3,
+      // it means there are too many people tied. No one gets the emoji.
+      if (totalPeopleInBottomTiers <= 3) {
+        bottomScoresToFlag = worstThreeTiers;
       }
-    });
-    
-    // Sort scores so highest over-par is at the end
-    uniqueScores.sort(function(a, b) { return a - b; });
-    
-    // Grab up to the 3 worst scores from the end of the unique scores list
-    var bottomScores = uniqueScores.slice(-3);
+    }
 
     var html = '';
     data.teams.forEach(function(team, idx) {
@@ -137,8 +156,8 @@
       var nameInner;
       var teamScore = Number(team.total);
       
-      // If their score matches any of the worst 3 scores on the board, give them the poop emoji
-      if (bottomScores.indexOf(teamScore) !== -1) {
+      // Apply emoji only if the score belongs to a qualified, clean bottom tier group
+      if (bottomScoresToFlag.length > 0 && bottomScoresToFlag.indexOf(teamScore) !== -1) {
         nameInner = '<span class="pile">&#128169;</span><div class="team-name">' + esc(team.name) + '</div><span class="pile">&#128169;</span>';
       } else {
         nameInner = '<div class="team-name">' + esc(team.name) + '</div>';
