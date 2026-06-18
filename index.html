@@ -35,14 +35,14 @@
     align-items: stretch;
   }
   
-  /* Shaved down width to allow maximum space for the golfer names */
+  /* Widened to 142px to look less crowded while protecting the right side layout */
   .team-left {
     background: #083860;
     color: #fff;
     padding: 12px 8px;
     display: flex;
     align-items: center;
-    width: 135px;
+    width: 142px;
     flex-shrink: 0;
   }
 
@@ -50,14 +50,14 @@
     flex: 1; 
     display: flex; 
     align-items: center; 
-    gap: 3px;
+    gap: 4px;
     min-width: 0; 
     justify-content: flex-start;
   }
   
-  /* Snug structural spacer so left edge aligns cleanly */
+  /* Spacer to ensure names line up exactly right */
   .emoji-spacer {
-    width: 18px;
+    width: 20px;
     display: inline-flex;
     justify-content: center;
     flex-shrink: 0;
@@ -75,7 +75,7 @@
   
   .pile { font-size: 14px; flex-shrink: 0; line-height: 1; }
 
-  /* Expanded container spacing prevents multi-line text wrapping */
+  /* Flex layout handles the remaining card space smoothly */
   .golfers {
     flex: 1;
     padding: 6px 10px;
@@ -86,6 +86,7 @@
   }
   .golfer { display: flex; align-items: center; padding: 4px 0; font-size: 14px; min-width: 0; }
   
+  /* Added text-overflow rules to guarantee long names never push to a second line */
   .golfer-name { 
     flex: 1; 
     color: #2c3e50; 
