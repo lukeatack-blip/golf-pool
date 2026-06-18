@@ -36,6 +36,8 @@
     border: 1px solid #d8dee8;
     display: flex;
     align-items: stretch;
+    cursor: pointer;
+    flex-wrap: wrap;
   }
   
   .team-left {
@@ -118,6 +120,22 @@
   }
   .refresh-btn:active { opacity: 0.7; }
   .loading { text-align: center; color: #8a9bb0; padding: 20px; line-height: 1.5; }
+
+  /* Round-by-round detail, shown when a team is tapped */
+  .rounds-detail {
+    flex-basis: 100%;
+    width: 100%;
+    display: none;
+    border-top: 1px solid #e2e7ee;
+    padding: 8px 12px 10px;
+    background: #f7f9fc;
+  }
+  .team.expanded .rounds-detail { display: block; }
+  .rd-row { display: flex; align-items: center; padding: 3px 0; font-size: 12px; }
+  .rd-name { flex: 1; color: #2c3e50; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+  .rd-cell { width: 40px; text-align: center; flex-shrink: 0; }
+  .rd-head .rd-cell, .rd-head .rd-name { color: #8a9bb0; font-weight: 600; }
+  .rd-cell.rd-val { font-weight: 600; }
 </style>
 </head>
 <body>
@@ -191,7 +209,7 @@
                     '<div class="team-name">' + esc(team.name) + '</div>';
       }
       
-      html += '<div class="team">';
+      html += '<div class="team" onclick="this.classList.toggle(\'expanded\')">';
       html += '  <div class="team-left">';
       html += '    <div class="name-wrap">' + nameInner + '</div>';
       html += '    <div class="team-total ' + totalFmt.cls + '">' + totalFmt.text + '</div>';
@@ -204,6 +222,24 @@
         html += '  <div class="golfer-name">' + esc(g.name) + '</div>';
         html += '  <div class="golfer-thru">' + thru + '</div>';
         html += '  <div class="golfer-score ' + gs.cls + '">' + gs.text + '</div>';
+        html += '</div>';
+      });
+      html += '  </div>';
+      html += '  <div class="rounds-detail">';
+      html += '    <div class="rd-row rd-head"><div class="rd-name">Round</div>' +
+              '<div class="rd-cell">R1</div><div class="rd-cell">R2</div>' +
+              '<div class="rd-cell">R3</div><div class="rd-cell">R4</div></div>';
+      team.golfers.forEach(function(g) {
+        html += '<div class="rd-row"><div class="rd-name">' + esc(g.name) + '</div>';
+        for (var r = 0; r < 4; r++) {
+          var val = (g.rounds && g.rounds[r] != null) ? String(g.rounds[r]) : '';
+          if (val === '' || val === '-') {
+            html += '<div class="rd-cell rd-val even">&ndash;</div>';
+          } else {
+            var rf = fmtScore(val);
+            html += '<div class="rd-cell rd-val ' + rf.cls + '">' + rf.text + '</div>';
+          }
+        }
         html += '</div>';
       });
       html += '  </div>';
