@@ -41,39 +41,10 @@
     display: flex;
     align-items: center;
     flex: 0 0 38%;
-    position: relative; /* Allows precise layout handling */
   }
-  .name-wrap { 
-    flex: 1; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    width: 100%;
-    height: 100%;
-  }
-  .team-name { 
-    font-size: 18px; 
-    font-weight: 600; 
-    line-height: 1.2; 
-    text-align: center; 
-    width: 100%; 
-  }
+  .name-wrap { flex: 1; display: flex; align-items: center; gap: 6px; justify-content: center; }
+  .team-name { font-size: 18px; font-weight: 600; line-height: 1.2; text-align: center; }
   .team-total { font-size: 20px; font-weight: 700; margin-left: 6px; }
-  
-  /* Laurel Container - Scaled up so text matches regular sizing */
-  .laurel-container { 
-    width: 110px; 
-    height: 90px; 
-    display: block; 
-    margin: 0 auto;
-  }
-  .laurel-text { 
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
-    font-size: 18px; 
-    font-weight: 600; 
-    fill: #ffffff; 
-  }
-
   .pile { font-size: 15px; flex-shrink: 0; line-height: 1; }
   .golfers {
     flex: 1;
@@ -125,39 +96,6 @@
 
   var hasData = false;
 
-  // Exact, high-fidelity circular wreath matching your reference image perfectly
-  function getLaurelSvg(name) {
-    return '<svg class="laurel-container" viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg">' +
-      '<g fill="#e6a100">' +
-        // Left Side Leaf Clusters
-        '<path d="M18,34 C14,35 9,41 11,46 C14,46 20,41 21,37 Z"/>' +
-        '<path d="M16,46 C11,49 7,55 9,60 C12,60 17,54 18,50 Z"/>' +
-        '<path d="M17,59 C13,63 10,70 13,74 C16,73 20,67 20,63 Z"/>' +
-        '<path d="M22,70 C18,74 16,81 20,84 C23,83 26,76 25,72 Z"/>' +
-        '<path d="M23,24 C20,22 15,26 15,31 C18,32 23,29 25,26 Z"/>' +
-        '<path d="M30,16 C27,13 22,15 21,20 C24,22 29,20 31,17 Z"/>' +
-        '<path d="M40,11 C38,8 33,8 31,13 C33,16 38,15 41,12 Z"/>' +
-        '<path d="M52,9 C51,5 46,4 43,8 C45,11 49,12 52,10 Z"/>' +
-        '<path d="M30,78 C35,74 38,67 36,63 C32,64 28,69 26,74 Z"/>' +
-        // Right Side Leaf Clusters
-        '<path d="M102,34 C106,35 111,41 109,46 C106,46 100,41 99,37 Z"/>' +
-        '<path d="M104,46 C109,49 113,55 111,60 C108,60 103,54 102,50 Z"/>' +
-        '<path d="M103,59 C107,63 110,70 107,74 C104,73 100,67 100,63 Z"/>' +
-        '<path d="M98,70 C102,74 104,81 100,84 C97,83 94,76 95,72 Z"/>' +
-        '<path d="M97,24 C100,22 105,26 105,31 C102,32 97,29 95,26 Z"/>' +
-        '<path d="M90,16 C93,13 98,15 99,20 C96,22 91,20 89,17 Z"/>' +
-        '<path d="M80,11 C82,8 87,8 89,13 C87,16 82,15 79,12 Z"/>' +
-        '<path d="M68,9 C69,5 74,4 77,8 C75,11 71,12 68,10 Z"/>' +
-        '<path d="M90,78 C85,74 82,67 84,63 C88,64 92,69 94,74 Z"/>' +
-        // Intersecting bottom stems
-        '<path d="M37,84 C48,89 57,86 63,79 C57,84 46,85 37,81 Z"/>' +
-        '<path d="M83,84 C72,89 63,86 57,79 C63,84 74,85 83,81 Z"/>' +
-      '</g>' +
-      // Text centered exactly, matching standard leader font sizes
-      '<text x="60" y="55" text-anchor="middle" dominant-baseline="middle" class="laurel-text">' + name + '</text>' +
-    '</svg>';
-  }
-
   function esc(s) {
     return String(s == null ? '' : s)
       .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -179,28 +117,19 @@
     }
 
     var firstTotal = data.teams[0] ? Number(data.teams[0].total) : null;
-    var secondTotal = data.teams[1] ? Number(data.teams[1].total) : null;
     var lastIdx = data.teams.length - 1;
     var lastTotal = data.teams[lastIdx] ? Number(data.teams[lastIdx].total) : null;
-
-    // Check condition: Is 1st place alone, or is there a tie?
-    var isTieForFirst = (firstTotal === secondTotal);
 
     var html = '';
     data.teams.forEach(function(team, idx) {
       var totalFmt = fmtScore(team.total);
       var nameInner;
       
-      if (Number(team.total) === firstTotal) {
-        // Only apply laurels if 1st place is completely untied
-        if (!isTieForFirst) {
-          nameInner = getLaurelSvg(esc(team.name));
-        } else {
-          nameInner = '<div class="team-name">' + esc(team.name) + '</div>';
-        }
-      } else if (Number(team.total) === lastTotal) {
+      if (Number(team.total) === lastTotal) {
+        // Keeps the pile icon for the last place spot 
         nameInner = '<span class="pile">&#128169;</span><div class="team-name">' + esc(team.name) + '</div><span class="pile">&#128169;</span>';
       } else {
+        // Standard, clean layout for first place and everywhere else
         nameInner = '<div class="team-name">' + esc(team.name) + '</div>';
       }
       
