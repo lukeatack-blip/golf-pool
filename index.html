@@ -46,9 +46,9 @@
   .team-name { font-size: 18px; font-weight: 600; line-height: 1.2; text-align: center; width: 100%; }
   .team-total { font-size: 20px; font-weight: 700; margin-left: 6px; }
   
-  /* Modern Laurel Container styling */
-  .laurel-container { width: 100%; height: auto; max-height: 55px; display: block; }
-  .laurel-text { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 16px; font-weight: 700; fill: #ffffff; }
+  /* Modern Laurel Container styling, sized to integrate bold name */
+  .laurel-container { width: 100%; height: auto; max-height: 60px; display: block; }
+  .laurel-text { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 22px; font-weight: 800; fill: #ffffff; letter-spacing: -0.5px; }
 
   .pile { font-size: 15px; flex-shrink: 0; line-height: 1; }
   .golfers {
@@ -101,33 +101,33 @@
 
   var hasData = false;
 
-  // This function builds a precise SVG pairing your exact laurel design with the leader's dynamic name centered
+  // New precise SVG construction based directly on the organic, bold fill and precise structure of image_1.png
   function getLaurelSvg(name) {
-    return '<svg class="laurel-container" viewBox="0 0 120 55" xmlns="http://www.w3.org/2000/svg">' +
+    return '<svg class="laurel-container" viewBox="0 0 160 80" xmlns="http://www.w3.org/2000/svg">' +
       '<g fill="#e6a100">' +
-        // Left Laurel branch
-        '<path d="M40.3,50 C33,48.2 27.5,41.4 25.5,31 C24,23.3 26,14.6 30.6,7 L29,5.5 C24,14 21.6,23.5 23.3,31.7 C25.5,42.5 31.7,49.8 40,51.8 Z"/>' +
-        '<path d="M28.4,14.2 C25.3,16 23.5,19 23.7,21.5 C25,21.2 27,19.2 28.5,16.5 Z"/>' +
-        '<path d="M24.8,22 C21.5,24 19.3,27.5 19.7,30 C21,29.5 23.2,27 24.8,24.2 Z"/>' +
-        '<path d="M23.5,30.5 C20,32.3 17.8,36.5 18,39 C19.5,38.5 21.8,35.5 23.3,32.5 Z"/>' +
-        '<path d="M24.5,38.8 C21,41 19,45 19.5,47.5 C20.8,46.8 23,43.5 24.3,40.8 Z"/>' +
-        '<path d="M30.5,10.5 C28.5,8 26,6.5 24.5,8.2 C25,10.2 27.3,12 29.5,12.5 Z"/>' +
-        '<path d="M25.5,18 C23,15.5 20,14.5 18.5,16.2 C19.2,18.2 21.8,19.5 24,19.8 Z"/>' +
-        '<path d="M22,26.5 C19,24.5 16,24 14.5,25.8 C15.5,27.8 18,28.8 20.5,28.8 Z"/>' +
-        '<path d="M20.5,35 C17.5,33.5 14.5,33.5 13,35.5 C14,37.5 16.8,38 19,37.8 Z"/>' +
-        // Right Laurel branch (Mirrored)
-        '<path d="M79.7,50 C87,48.2 92.5,41.4 94.5,31 C96,23.3 94,14.6 89.4,7 L91,5.5 C96,14 98.4,23.5 96.7,31.7 C94.5,42.5 88.3,49.8 80,51.8 Z"/>' +
-        '<path d="M91.6,14.2 C94.7,16 96.5,19 96.3,21.5 C95,21.2 93,19.2 91.5,16.5 Z"/>' +
-        '<path d="M95.2,22 C98.5,24 100.7,27.5 100.3,30 C99,29.5 96.8,27 95.2,24.2 Z"/>' +
-        '<path d="M96.5,30.5 C100,32.3 102.2,36.5 102,39 C100.5,38.5 98.2,35.5 96.7,32.5 Z"/>' +
-        '<path d="M95.5,38.8 C99,41 101,45 100.5,47.5 C99.2,46.8 97,43.5 95.7,40.8 Z"/>' +
-        '<path d="M89.5,10.5 C91.5,8 94,6.5 95.5,8.2 C95,10.2 92.7,12 90.5,12.5 Z"/>' +
-        '<path d="M94.5,18 C97,15.5 100,14.5 101.5,16.2 C100.8,18.2 98.2,19.5 96,19.8 Z"/>' +
-        '<path d="M98,26.5 C101,24.5 104,24 105.5,25.8 C104.5,27.8 102,28.8 99.5,28.8 Z"/>' +
-        '<path d="M99.5,35 C102.5,33.5 105.5,33.5 107,35.5 C106,37.5 103.2,38 101,37.8 Z"/>' +
+        // Left Laurel branch - Bold fill, organic shape matching reference exactly
+        '<path d="M53.7,66.7 C44.1,64.2 36.8,55 34.2,41.2 C32.1,30.8 34.8,19.2 40.9,9.2 L38.7,7.2 C32,18.5 28.8,31.2 31.1,42.1 C34,56.6 42.3,66.4 53.3,69 Z"/>' +
+        '<path d="M37.9,19 C33.7,21.5 31.3,25.5 31.6,28.8 C33.3,28.4 36,25.8 38,22.2 Z"/>' +
+        '<path d="M33,29.3 C28.6,32 25.7,36.7 26.3,40 C28,39.3 31,36 33,32.3 Z"/>' +
+        '<path d="M31.3,40.7 C26.7,43.1 23.7,48.7 24,52 C26,51.3 29,47.3 31,43.3 Z"/>' +
+        '<path d="M32.7,51.7 C28,54.7 25.3,60 26,63.3 C27.7,62.4 30.7,58 32.4,54.4 Z"/>' +
+        '<path d="M40.7,14 C38,10.7 34.7,8.7 32.7,11 C33.3,13.7 36.4,16 39.3,16.7 Z"/>' +
+        '<path d="M34,24 C30.7,20.7 26.7,19.3 24.7,21.6 C25.6,24.3 29,26 32,26.4 Z"/>' +
+        '<path d="M29.3,35.3 C25.3,32.7 21.3,32 19.3,34.4 C20.7,37.1 24,38.4 27.3,38.4 Z"/>' +
+        '<path d="M27.3,46.7 C23.3,44.7 19.3,44.7 17.3,47.4 C18.7,50.1 22.4,50.7 25.4,50.4 Z"/>' +
+        // Right Laurel branch (Precise Mirrored coordinates)
+        '<path d="M106.3,66.7 C115.9,64.2 123.2,55 125.8,41.2 C127.9,30.8 125.2,19.2 119.1,9.2 L121.3,7.2 C128,18.5 131.2,31.2 128.9,42.1 C126,56.6 117.7,66.4 106.7,69 Z"/>' +
+        '<path d="M122.1,19 C126.3,21.5 128.7,25.5 128.4,28.8 C126.7,28.4 124,25.8 122,22.2 Z"/>' +
+        '<path d="M127,29.3 C131.4,32 134.3,36.7 133.7,40 C132,39.3 129,36 127,32.3 Z"/>' +
+        '<path d="M128.7,40.7 C133.3,43.1 136.3,48.7 136,52 C134,51.3 131,47.3 129,43.3 Z"/>' +
+        '<path d="M127.3,51.7 C132,54.7 134.7,60 134,63.3 C132.3,62.4 129.3,58 127.6,54.4 Z"/>' +
+        '<path d="M119.3,14 C122,10.7 125.3,8.7 127.3,11 C126.7,13.7 123.6,16 120.7,16.7 Z"/>' +
+        '<path d="M126,24 C129.3,20.7 133.3,19.3 135.3,21.6 C134.4,24.3 131,26 128,26.4 Z"/>' +
+        '<path d="M130.7,35.3 C134.7,32.7 138.7,32 140.7,34.4 C139.3,37.1 136,38.4 132.7,38.4 Z"/>' +
+        '<path d="M132.7,46.7 C136.7,44.7 140.7,44.7 142.7,47.4 C141.3,50.1 137.6,50.7 134.6,50.4 Z"/>' +
       '</g>' +
-      // Dynamic Text Placement centered perfectly between branches
-      '<text x="60" y="34" text-anchor="middle" class="laurel-text">' + name + '</text>' +
+      // Dynamic Text Placement centered perfectly, with larger font size and heavy weight (font-weight: 800)
+      '<text x="80" y="47" text-anchor="middle" class="laurel-text">' + name + '</text>' +
     '</svg>';
   }
 
@@ -162,7 +162,7 @@
       var nameInner;
       
       if (Number(team.total) === firstTotal) {
-        // First place gets the modern dynamic SVG laurels with the user's name rendered cleanly inside it
+        // Leader gets the precise dynamic SVG laurels based on image_1.png with their name rendered boldly inside.
         nameInner = getLaurelSvg(esc(team.name));
       } else if (Number(team.total) === lastTotal) {
         nameInner = '<span class="pile">&#128169;</span><div class="team-name">' + esc(team.name) + '</div><span class="pile">&#128169;</span>';
