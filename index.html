@@ -35,36 +35,34 @@
     align-items: stretch;
   }
   
-  /* Rigid fixed sidebar width */
+  /* Shaved down width to allow maximum space for the golfer names */
   .team-left {
     background: #083860;
     color: #fff;
-    padding: 12px 10px;
+    padding: 12px 8px;
     display: flex;
     align-items: center;
-    width: 155px;
+    width: 135px;
     flex-shrink: 0;
   }
 
-  /* Left-aligned wrapper with a tight gap for the elements */
   .name-wrap { 
     flex: 1; 
     display: flex; 
     align-items: center; 
-    gap: 4px;
+    gap: 3px;
     min-width: 0; 
     justify-content: flex-start;
   }
   
-  /* Fixed spacing container for the left slot so names line up perfectly */
+  /* Snug structural spacer so left edge aligns cleanly */
   .emoji-spacer {
-    width: 22px;
+    width: 18px;
     display: inline-flex;
     justify-content: center;
     flex-shrink: 0;
   }
   
-  /* Left aligned name, ensuring it stays consistent across rows */
   .team-name { 
     font-size: 18px; 
     font-weight: 600; 
@@ -73,21 +71,32 @@
     white-space: nowrap;
   }
   
-  .team-total { font-size: 20px; font-weight: 700; margin-left: auto; padding-left: 4px; flex-shrink: 0; }
+  .team-total { font-size: 20px; font-weight: 700; margin-left: auto; padding-left: 2px; flex-shrink: 0; }
   
-  .pile { font-size: 15px; flex-shrink: 0; line-height: 1; }
+  .pile { font-size: 14px; flex-shrink: 0; line-height: 1; }
 
+  /* Expanded container spacing prevents multi-line text wrapping */
   .golfers {
     flex: 1;
-    padding: 6px 12px;
+    padding: 6px 10px;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    min-width: 0;
   }
-  .golfer { display: flex; align-items: center; padding: 4px 0; font-size: 14px; }
-  .golfer-name { flex: 1; color: #2c3e50; }
-  .golfer-thru { width: 44px; text-align: center; color: #8a9bb0; font-size: 12px; }
-  .golfer-score { width: 40px; text-align: right; font-weight: 600; }
+  .golfer { display: flex; align-items: center; padding: 4px 0; font-size: 14px; min-width: 0; }
+  
+  .golfer-name { 
+    flex: 1; 
+    color: #2c3e50; 
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+  }
+  
+  .golfer-thru { width: 40px; text-align: center; color: #8a9bb0; font-size: 12px; flex-shrink: 0; }
+  .golfer-score { width: 35px; text-align: right; font-weight: 600; flex-shrink: 0; }
+  
   .neg { color: #d01828; }
   .pos { color: #5a6b85; }
   .even { color: #5a6b85; }
@@ -174,12 +183,10 @@
       var teamScore = Number(team.total);
       
       if (showPoopEmoji && teamScore === targetWorstScore) {
-        // Left side gets its emoji inside the fixed-width spacer; right side tags along naturally right after the name text.
         nameInner = '<div class="emoji-spacer"><span class="pile">&#128169;</span></div>' +
                     '<div class="team-name">' + esc(team.name) + '</div>' +
                     '<span class="pile">&#128169;</span>';
       } else {
-        // Rows without emojis still get the empty fixed-width structural spacer so the names start on the exact same pixel line.
         nameInner = '<div class="emoji-spacer"></div>' +
                     '<div class="team-name">' + esc(team.name) + '</div>';
       }
