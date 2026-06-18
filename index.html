@@ -35,20 +35,43 @@
     align-items: stretch;
   }
   
-  /* Fixed width sidebar ensures perfect, rigid layout across all blocks */
+  /* Rigid fixed sidebar width */
   .team-left {
     background: #083860;
     color: #fff;
-    padding: 12px 8px;
+    padding: 12px 10px;
     display: flex;
     align-items: center;
-    width: 145px;
+    width: 155px;
     flex-shrink: 0;
   }
-  .name-wrap { flex: 1; display: flex; align-items: center; gap: 4px; justify-content: center; min-width: 0; }
-  .team-name { font-size: 18px; font-weight: 600; line-height: 1.2; text-align: center; white-space: nowrap; }
+
+  /* Grid structure ensures the text always occupies the same starting alignment */
+  .name-wrap { 
+    flex: 1; 
+    display: grid; 
+    grid-template-columns: 20px 1fr 20px; 
+    align-items: center; 
+    gap: 4px;
+    min-width: 0; 
+  }
+  
+  /* Left aligned name, ensuring it stays consistent across rows */
+  .team-name { 
+    font-size: 18px; 
+    font-weight: 600; 
+    line-height: 1.2; 
+    text-align: left; 
+    white-space: nowrap;
+    grid-column: 2; 
+  }
+  
   .team-total { font-size: 20px; font-weight: 700; margin-left: auto; padding-left: 4px; flex-shrink: 0; }
-  .pile { font-size: 15px; flex-shrink: 0; line-height: 1; }
+  
+  .pile { font-size: 15px; flex-shrink: 0; line-height: 1; text-align: center; }
+  .pile-left { grid-column: 1; }
+  .pile-right { grid-column: 3; }
+
   .golfers {
     flex: 1;
     padding: 6px 12px;
@@ -65,6 +88,7 @@
   .even { color: #5a6b85; }
   .team-left .pos, .team-left .even { color: #fff; }
   .team-left .neg { color: #ff5c5c; }
+  
   .refresh-btn {
     display: block;
     width: 100%;
@@ -145,7 +169,7 @@
       var teamScore = Number(team.total);
       
       if (showPoopEmoji && teamScore === targetWorstScore) {
-        nameInner = '<span class="pile">&#128169;</span><div class="team-name">' + esc(team.name) + '</div><span class="pile">&#128169;</span>';
+        nameInner = '<span class="pile pile-left">&#128169;</span><div class="team-name">' + esc(team.name) + '</div><span class="pile pile-right">&#128169;</span>';
       } else {
         nameInner = '<div class="team-name">' + esc(team.name) + '</div>';
       }
