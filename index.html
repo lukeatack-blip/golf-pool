@@ -34,17 +34,20 @@
     display: flex;
     align-items: stretch;
   }
+  
+  /* Fixed width sidebar ensures perfect, rigid layout across all blocks */
   .team-left {
     background: #083860;
     color: #fff;
-    padding: 12px 12px;
+    padding: 12px 8px;
     display: flex;
     align-items: center;
-    flex: 0 0 38%;
+    width: 145px;
+    flex-shrink: 0;
   }
-  .name-wrap { flex: 1; display: flex; align-items: center; gap: 6px; justify-content: center; }
-  .team-name { font-size: 18px; font-weight: 600; line-height: 1.2; text-align: center; }
-  .team-total { font-size: 20px; font-weight: 700; margin-left: 6px; }
+  .name-wrap { flex: 1; display: flex; align-items: center; gap: 4px; justify-content: center; min-width: 0; }
+  .team-name { font-size: 18px; font-weight: 600; line-height: 1.2; text-align: center; white-space: nowrap; }
+  .team-total { font-size: 20px; font-weight: 700; margin-left: auto; padding-left: 4px; flex-shrink: 0; }
   .pile { font-size: 15px; flex-shrink: 0; line-height: 1; }
   .golfers {
     flex: 1;
@@ -121,10 +124,8 @@
     var targetWorstScore = null;
     
     if (totalTeams > 0) {
-      // 1. Identify the actual worst score value currently on the board
       targetWorstScore = Number(data.teams[totalTeams - 1].total);
       
-      // 2. Count exactly how many teams share this exact score
       var countTiedForLast = 0;
       data.teams.forEach(function(t) {
         if (Number(t.total) === targetWorstScore) {
@@ -132,7 +133,6 @@
         }
       });
 
-      // 3. Only enable if 3 or fewer people share it
       if (countTiedForLast <= 3) {
         showPoopEmoji = true;
       }
@@ -144,7 +144,6 @@
       var nameInner;
       var teamScore = Number(team.total);
       
-      // If enabled, apply emojis only to the players holding that specific worst score
       if (showPoopEmoji && teamScore === targetWorstScore) {
         nameInner = '<span class="pile">&#128169;</span><div class="team-name">' + esc(team.name) + '</div><span class="pile">&#128169;</span>';
       } else {
