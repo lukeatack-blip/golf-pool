@@ -194,13 +194,38 @@
       }
     }
 
+    var showMoneyEmoji = false;
+    var targetBestScore = null;
+
+    if (totalTeams > 0) {
+      targetBestScore = Number(data.teams[0].total);
+
+      var countTiedForFirst = 0;
+      data.teams.forEach(function(t) {
+        if (Number(t.total) === targetBestScore) {
+          countTiedForFirst++;
+        }
+      });
+
+      if (countTiedForFirst <= 3) {
+        showMoneyEmoji = true;
+      }
+    }
+
     var html = '';
     data.teams.forEach(function(team, idx) {
       var totalFmt = fmtScore(team.total);
       var nameInner;
       var teamScore = Number(team.total);
-      
-      if (showPoopEmoji && teamScore === targetWorstScore) {
+
+      var isLast = showPoopEmoji && teamScore === targetWorstScore;
+      var isFirst = showMoneyEmoji && teamScore === targetBestScore;
+
+      if (isFirst) {
+        nameInner = '<div class="emoji-spacer"><span class="pile">&#129395;</span></div>' +
+                    '<div class="team-name">' + esc(team.name) + '</div>' +
+                    '<span class="pile">&#129395;</span>';
+      } else if (isLast) {
         nameInner = '<div class="emoji-spacer"><span class="pile">&#128169;</span></div>' +
                     '<div class="team-name">' + esc(team.name) + '</div>' +
                     '<span class="pile">&#128169;</span>';
