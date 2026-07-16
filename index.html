@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Golf Pool</title>
-<meta name="theme-color" content="#083860">
+<meta name="theme-color" content="#0C2340">
 <link rel="manifest" href="./manifest.json">
 <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
 <link rel="apple-touch-icon" href="./apple-touch-icon.png">
@@ -16,18 +16,18 @@
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     background: #eef1f5;
-    color: #083860;
+    color: #0C2340;
     padding: 16px;
     padding-top: calc(16px + env(safe-area-inset-top));
     max-width: 600px;
     margin: 0 auto;
   }
   .header { text-align: center; margin-bottom: 12px; }
-  
-  /* Made the US Open logo smaller and more compact */
+
+  /* The Open logo, compact */
   .logo { display: block; width: 140px; height: auto; margin: 0 auto; }
-  .status { font-size: 12px; color: #d01828; margin-top: 6px; }
-  
+  .status { font-size: 12px; color: #C8102E; margin-top: 6px; }
+
   .team {
     background: #ffffff;
     border-radius: 10px;
@@ -39,9 +39,9 @@
     cursor: pointer;
     flex-wrap: wrap;
   }
-  
+
   .team-left {
-    background: #083860;
+    background: #0C2340;
     color: #fff;
     padding: 12px 8px;
     display: flex;
@@ -58,14 +58,14 @@
     min-width: 0; 
     justify-content: flex-start;
   }
-  
+
   .emoji-spacer {
     width: 20px;
     display: inline-flex;
     justify-content: center;
     flex-shrink: 0;
   }
-  
+
   .team-name { 
     font-size: 18px; 
     font-weight: 600; 
@@ -73,9 +73,9 @@
     text-align: left; 
     white-space: nowrap;
   }
-  
+
   .team-total { font-size: 20px; font-weight: 700; margin-left: auto; padding-left: 2px; flex-shrink: 0; }
-  
+
   .pile { font-size: 14px; flex-shrink: 0; line-height: 1; }
 
   .golfers {
@@ -87,7 +87,7 @@
     min-width: 0;
   }
   .golfer { display: flex; align-items: center; padding: 4px 0; font-size: 14px; min-width: 0; }
-  
+
   .golfer-name { 
     flex: 1; 
     color: #2c3e50; 
@@ -95,21 +95,21 @@
     overflow: hidden; 
     text-overflow: ellipsis; 
   }
-  
+
   .golfer-thru { width: 40px; text-align: center; color: #8a9bb0; font-size: 12px; flex-shrink: 0; }
   .golfer-score { width: 35px; text-align: right; font-weight: 600; flex-shrink: 0; }
-  
-  .neg { color: #d01828; }
+
+  .neg { color: #C8102E; }
   .pos { color: #5a6b85; }
   .even { color: #5a6b85; }
   .team-left .pos, .team-left .even { color: #fff; }
-  .team-left .neg { color: #ff5c5c; }
-  
+  .team-left .neg { color: #ff6b6b; }
+
   .refresh-btn {
     display: block;
     width: 100%;
     padding: 12px;
-    background: #083860;
+    background: #0C2340;
     color: #fff;
     border: none;
     border-radius: 10px;
@@ -140,7 +140,7 @@
 </head>
 <body>
   <div class="header">
-    <img class="logo" src="./the-open-logo.png" alt="US Open">
+    <img class="logo" src="./the-open-logo.png" alt="The Open">
     <div class="status" id="status" hidden></div>
   </div>
 
